@@ -1,0 +1,141 @@
+:root {
+    --primary-color: #007bff;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+header {
+    width: 100vw;
+    height: 10vh;
+    max-height: 200px;
+    display: absolute;
+}
+
+.Header-ul-Container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    background-color: black;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.Header-ul {
+    width: 30%;
+    max-width: 300px;
+    min-width: fit-content;
+    list-style: none;
+    height: fit-content;
+    margin: 0px;
+    padding: 0px;
+    display: flex;
+    margin-right: 5px;
+
+}
+
+.Header-ul-Button {
+    color: white;
+    padding: 20px;
+    font-weight: bold;
+}
+
+.Header-ul-Button:hover {
+    color: white;
+    background-color: gray;
+    padding: 20px;
+    font-weight: bold;
+}
+
+
+.Welcome-Main-Canvas {
+    height: 70vh;
+    width: 100%;
+    background-color: gray;
+    position: relative;
+
+
+}
+
+.About-Me {
+    height: 40%;
+    width: 250px;
+    padding: 20px;
+    background-color: red;
+    position: absolute;
+    top: 50%;
+    /* Move it 50% from the top of the outer div */
+    transform: translateY(-50%);
+    /*Moves it 50% of his own height putting it on th center*/
+    border-radius: 20px;
+    transition: height 0.5s ease-in-out, width 0.5s ease-in-out;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: repeat(1, auto);
+}
+
+.About-Me:hover {
+    height: 60%;
+    width: 40%;
+}
+
+.About-Me:hover .About-Me-Extended {
+    height: fit-content;
+    width: 100%;
+    transition: height 0.9s ease-in-out, width 0.9s ease-in-out;
+    visibility: visible;
+}
+
+
+.About-Me-Minimal {
+    height: 100%;
+    width: fit-content;
+    background-color: blue;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.About-Me-Img-Container {
+    background-color: yellow;
+    
+}
+
+.About-Me-Img {
+    width: 100%;
+    height: 100%;
+    min-width: 250px;
+    max-width: 250px;
+}
+
+.Welcome-Text {
+    height: fit-content;
+    width: fit-content;
+    color: white;
+    background-color: purple;
+    margin: 0px;
+}
+
+.About-Me-Extended {
+    background-color: orange;
+    height: 0px;
+    width: 0px;
+    transition: height 0.3s ease-in-out, width 0.3s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    visibility: hidden;
+}
+
+.About-Me-Extended-paragraph{
+height: 100%;
+width: 100%;
+background-color: white;
+font-size: 100% ;
+transition:  font-size 0.3s ;
+}
