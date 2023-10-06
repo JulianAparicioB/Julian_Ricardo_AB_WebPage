@@ -41,23 +41,183 @@
             <div class="About-Me">
                 <div class="About-Me-Minimal">
                     <div class="About-Me-Img-Container">
-                        <img alt="Gato lindo" class="About-Me-Img" src="https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=0.670xw:1.00xh;0.167xw,0&resize=640:*">
+                        <img alt="Gato lindo" class="About-Me-Img"
+                            src="https://hips.hearstapps.com/hmg-prod/images/cute-cat-photos-1593441022.jpg?crop=0.670xw:1.00xh;0.167xw,0&resize=640:*">
                     </div>
                     <h1 class="Welcome-Text"> Welcome im Julian </h1>
                 </div>
 
                 <div class="About-Me-Extended">
-                   <p  class="About-Me-Extended-paragraph"> PARRAFOSSSSSSSSSSSSSSS</p>
+
+                    <div class="About-Me-Text-Wrapper">
+                        <h1 class="About-Me-Title"> WEB DEVELOPER</h1>
+                        <p class="About-Me-Extended-Paragraph">Soy Estudiante de Sistematización de Datos de la
+                            Universidad
+                            Distrital F.J.C. a quien le encanta el área de desarrollo backend y sus respectivas
+                            variantes,
+                            he trabajado en el área del
+                            frontend en diferentes proyectos y también es un área que me gusta explorar</p>
+                    </div>
                 </div>
             </div>
 
-            <div class="Game-Camvas">
-            </div>
+            <canvas class="Game-Camvas">
+
+            </canvas>
 
         </section>
 
     </main>
 
 </body>
+<script>
+
+    /*****************/
+    /****GAME CAVAS****/
+    /*****************/
+
+    const canvas = document.querySelector('canvas');
+    console.log(canvas)
+    const context = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    /*
+        const myCanvas = document.querySelector('canvas');
+        const originalHeight = myCanvas.height;
+        const originalWidth = myCanvas.width;
+    
+        render();
+        function render() {
+            let dimensions = getObjectFitSize(
+                true,
+                myCanvas.clientWidth,
+                myCanvas.clientHeight,
+                myCanvas.width,
+                myCanvas.height
+            );
+    
+            const dpr = window.devicePixelRatio || 1;
+            myCanvas.width = dimensions.width * dpr;
+            myCanvas.height = dimensions.height * dpr;
+    
+            let ctx = myCanvas.getContext("2d");
+            let ratio = Math.min(
+                myCanvas.clientWidth / originalWidth,
+                myCanvas.clientHeight / originalHeight
+            );
+            ctx.scale(ratio * dpr, ratio * dpr); //adjust this!
+    
+        }
+    
+        function getObjectFitSize(
+            contains, // true = contain, false = cover ,
+            containerWidth,
+            containerHeight,
+            width,
+            height
+        ) {
+            var doRatio = width / height;
+            var cRatio = containerWidth / containerHeight;
+            var targetWidth = 0;
+            var targetHeight = 0;
+            var test = contains ? doRatio > cRatio : doRatio < cRatio;
+    
+            if (test) {
+                targetWidth = containerWidth;
+                targetHeight = targetWidth / doRatio;
+            } else {
+                targetHeight = containerHeight;
+                targetWidth = targetHeight * doRatio;
+            }
+    
+            return {
+                width: targetWidth,
+                height: targetHeight,
+                x: (containerWidth - targetWidth) / 2,
+                y: (containerHeight - targetHeight) / 2
+            };
+        }
+    */
+
+    /*Player*/
+    class Player {
+
+        constructor() {
+
+            this.velocity = {
+                x: 0,
+                y: 0
+            }
+
+            const playerImg = new Image();
+            const scale = .4;
+            playerImg.src = './spaceship.png';
+
+
+            playerImg.onload = () => {
+                this.image = playerImg;
+                this.width = playerImg.width * scale;
+                this.height = playerImg.height *scale;
+
+                this.position = {
+                x: canvas.width / 2 - this.width / 2, //centrado en la mitad de la pantalla
+                y: canvas.height - this.height -20,     //posicion abajo 20 px de margen
+            }
+            }
+
+        }
+
+        /*Player Methods*/
+        draw() {
+            /* context.fillStyle = 'red'; //colors inside shapes
+             context.fillRect(this.position.x, this.position.y,
+                 this.width, this.height); // method to draw a rectangle 
+             */
+            context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+
+        }
+
+        update(){
+            if(this.image){
+                this.position.x += this.velocity.x;
+                this.draw();
+            }
+            
+        }
+    }
+
+    const player = new Player();
+
+    /*This function is useb besause loading the image takes time*/
+    function animate() {
+        requestAnimationFrame(animate); //request to start a function before the next frame is painted on 
+        //black canvas filled 
+        context.fillStyle = 'black';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+        //draw player
+        player.update();
+    }
+
+    animate();
+
+    addEventListener('keydown', (event) =>{
+
+        switch(event.key){
+            case 'ArrowLeft':
+                player.velocity.x = -5;
+            break;
+
+            case 'ArrowRight':
+            console.log('right');
+            break;
+
+            case ' ':
+            console.log('shoot');
+            break;
+        }
+    });
+
+</script>
 
 </html>

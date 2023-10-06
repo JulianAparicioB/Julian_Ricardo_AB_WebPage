@@ -9,6 +9,8 @@ body {
     padding: 0px;
 }
 
+/******** HEADER SECTION **********/
+
 header {
     width: 100vw;
     height: 10vh;
@@ -51,18 +53,22 @@ header {
     font-weight: bold;
 }
 
+/******ABOUT ME SECTION*****/
+
+#welcome-section{
+    z-index: 0;
+}
 
 .Welcome-Main-Canvas {
     height: 70vh;
     width: 100%;
     background-color: gray;
     position: relative;
-
-
+    z-index: 1;
 }
 
 .About-Me {
-    height: 40%;
+    height: 300px;
     width: 250px;
     padding: 20px;
     background-color: red;
@@ -76,18 +82,16 @@ header {
     display: grid;
     grid-template-columns: auto 1fr;
     grid-template-rows: repeat(1, auto);
+    max-width: 800px;
+    max-height: 900px;
+    z-index: 2;  
 }
 
 .About-Me:hover {
     height: 60%;
     width: 40%;
-}
-
-.About-Me:hover .About-Me-Extended {
-    height: fit-content;
-    width: 100%;
-    transition: height 0.9s ease-in-out, width 0.9s ease-in-out;
-    visibility: visible;
+    max-width: 800px;
+    max-height: 900px;
 }
 
 
@@ -122,20 +126,49 @@ header {
 }
 
 .About-Me-Extended {
+    height: 100%;
+    width: 100%;
     background-color: orange;
-    height: 0px;
-    width: 0px;
-    transition: height 0.3s ease-in-out, width 0.3s ease-in-out;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    visibility: hidden;
+    overflow-y: hidden;
 }
 
-.About-Me-Extended-paragraph{
+
+.About-Me-Text-Wrapper{
 height: 100%;
 width: 100%;
-background-color: white;
-font-size: 100% ;
-transition:  font-size 0.3s ;
+display: flex;
+flex-direction:column;
+justify-content: center;
+align-items: center;
+
+font-size: auto ;
+opacity: 0;
+transition: opacity .4s ease-in-out ;
+overflow: hidden;
 }
+
+
+.About-Me:hover .About-Me-Text-Wrapper{
+    opacity: 1;
+    transition: opacity 1s ease-in-out ;
+}
+
+.About-Me-Title{
+    background-color: purple;
+
+}
+
+.About-Me-Extended-Paragraph{
+    background-color: antiquewhite;
+}
+
+
+
+/********CANVAS GAME SECTION*********/
+.Game-Camvas{
+    background-color: grey;
+    height: 100%;
+    width: 100%;
+    z-index: 3;
+ }
+ 
