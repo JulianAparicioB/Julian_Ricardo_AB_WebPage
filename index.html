@@ -150,6 +150,8 @@
                 y: 0
             }
 
+            this.rotation = 0;
+
             const playerImg = new Image();
             const scale = .4;
             playerImg.src = './spaceship.png';
@@ -158,12 +160,12 @@
             playerImg.onload = () => {
                 this.image = playerImg;
                 this.width = playerImg.width * scale;
-                this.height = playerImg.height *scale;
+                this.height = playerImg.height * scale;
 
                 this.position = {
-                x: canvas.width / 2 - this.width / 2, //centrado en la mitad de la pantalla
-                y: canvas.height - this.height -20,     //posicion abajo 20 px de margen
-            }
+                    x: canvas.width / 2 - this.width / 2, //centrado en la mitad de la pantalla
+                    y: canvas.height - this.height - 20,     //posicion abajo 20 px de margen
+                }
             }
 
         }
@@ -174,20 +176,61 @@
              context.fillRect(this.position.x, this.position.y,
                  this.width, this.height); // method to draw a rectangle 
              */
-            context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height);
+
+            /*
+            In order to rotate an object in html canvas you gotta take a screenshot of the canvas,
+            then move the canvas to the middle of the object
+            rotate the whole canvas 
+            now return the rotaton point to the top left of the canvas
+            and rotate it to its original position.
+            */
+
+            context.save() //screenshot of the canvas
+            context.translate(player.position.x + player.width / 2, player.position.y + player.height / 2) //locate the canvas  context (0,0) positionin the middle of the player
+            context.rotate(this.rotation); //rotate the context 
+           
+            
+
+            //UNCOMENT TO SEE THE ROTATED CONTEXT, also cahnge the height -20 for something greater
+            /*
+            context.fillStyle = 'red';
+            context.fillRect( 0,0 , canvas.width /3, canvas.height /3);
+
+            context.drawImage(this.image, 0-player.width/2, 0-player.height/2, this.width, this.height);
+
+            context.restore();
+            */
+
+            context.translate(-player.position.x - player.width / 2 , - player.position.y - player.height / 2) //Restore the original canvas position 
+            context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height); //draw the ship
+            context.restore(); //restore the original canvas
 
         }
 
-        update(){
-            if(this.image){
+        update() {
+            if (this.image) {
                 this.position.x += this.velocity.x;
                 this.draw();
             }
-            
+
+        }
+    }
+
+    //object to monitor if a key is being pressed
+    const keys = {
+        ArrowLeft: {
+            pressed: false
+        },
+        ArrowRight: {
+            pressed: false
+        },
+        Space: {
+            pressed: false
         }
     }
 
     const player = new Player();
+
 
     /*This function is useb besause loading the image takes time*/
     function animate() {
@@ -197,24 +240,66 @@
         context.fillRect(0, 0, canvas.width, canvas.height);
         //draw player
         player.update();
+
+        if (keys.ArrowLeft.pressed && player.position.x >= 0) { //left key is pressed, move left.  it stops if the player goes outside to the left
+            player.velocity.x = -5;
+            player.rotation = -.15; //rotate the player slightly to the left
+        } else {
+            if (keys.ArrowRight.pressed && (player.position.x + player.width <= canvas.width)) { //it stops if the player goes outside to the right
+                player.velocity.x = 5; //right key is pressed, move right
+                player.rotation = .15; //rotate the player to the right
+            } else {
+                player.velocity.x = 0; //not moving left or right
+                player.rotation = 0; //rotate the player to the right
+
+            }
+        }
+
+
+
+
+
+
     }
 
     animate();
 
-    addEventListener('keydown', (event) =>{
+    //keyboard event listener for player input actions
+    addEventListener('keydown', (event) => {
 
-        switch(event.key){
+        switch (event.key) {
             case 'ArrowLeft':
-                player.velocity.x = -5;
-            break;
+                keys.ArrowLeft.pressed = true;
+                break;
 
             case 'ArrowRight':
-            console.log('right');
-            break;
+                console.log('right');
+                keys.ArrowRight.pressed = true;
+
+                break;
 
             case ' ':
-            console.log('shoot');
-            break;
+                console.log('shoot');
+                break;
+        }
+    });
+
+    //keyboard event listener for player stop input actions
+    addEventListener('keyup', (event) => {
+
+        switch (event.key) {
+            case 'ArrowLeft':
+                keys.ArrowLeft.pressed = false;
+                break;
+
+            case 'ArrowRight':
+                keys.ArrowRight.pressed = false;
+
+                break;
+
+            case ' ':
+                console.log('shoot');
+                break;
         }
     });
 
