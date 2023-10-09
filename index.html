@@ -164,14 +164,14 @@
 
                 this.position = {
                     x: canvas.width / 2 - this.width / 2, //centrado en la mitad de la pantalla
-                    y: canvas.height - this.height - 20,     //posicion abajo 20 px de margen
+                    y: canvas.height - this.height,     //posicion abajo 20 px de margen
                 }
             }
 
         }
 
-        /*Player Methods*/
-        draw() {
+         /*Player Methods*/
+         draw() {
             /* context.fillStyle = 'red'; //colors inside shapes
              context.fillRect(this.position.x, this.position.y,
                  this.width, this.height); // method to draw a rectangle 
@@ -182,7 +182,7 @@
             then move the canvas to the middle of the object
             rotate the whole canvas 
             now return the rotaton point to the top left of the canvas
-            and rotate it to its original position.
+            adn then returnto the screenshot saved
             */
 
             context.save() //screenshot of the canvas
@@ -203,6 +203,7 @@
 
             context.translate(-player.position.x - player.width / 2 , - player.position.y - player.height / 2) //Restore the original canvas position 
             context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height); //draw the ship
+            
             context.restore(); //restore the original canvas
 
         }
@@ -213,6 +214,17 @@
                 this.draw();
             }
 
+        }
+    }
+
+
+    /*Proyectile class*/
+
+    class Proyectile{
+
+        constructor(pPosition){
+            this.position = pPosition;
+            
         }
     }
 
