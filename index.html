@@ -170,8 +170,8 @@
 
         }
 
-         /*Player Methods*/
-         draw() {
+        /*Player Methods*/
+        draw() {
             /* context.fillStyle = 'red'; //colors inside shapes
              context.fillRect(this.position.x, this.position.y,
                  this.width, this.height); // method to draw a rectangle 
@@ -188,8 +188,8 @@
             context.save() //screenshot of the canvas
             context.translate(player.position.x + player.width / 2, player.position.y + player.height / 2) //locate the canvas  context (0,0) positionin the middle of the player
             context.rotate(this.rotation); //rotate the context 
-           
-            
+
+
 
             //UNCOMENT TO SEE THE ROTATED CONTEXT, also cahnge the height -20 for something greater
             /*
@@ -201,9 +201,9 @@
             context.restore();
             */
 
-            context.translate(-player.position.x - player.width / 2 , - player.position.y - player.height / 2) //Restore the original canvas position 
+            context.translate(-player.position.x - player.width / 2, - player.position.y - player.height / 2) //Restore the original canvas position 
             context.drawImage(this.image, this.position.x, this.position.y, this.width, this.height); //draw the ship
-            
+
             context.restore(); //restore the original canvas
 
         }
@@ -220,13 +220,31 @@
 
     /*Proyectile class*/
 
-    class Proyectile{
+    class Proyectile {
 
-        constructor(position){
+        constructor({ position, velocity }) {
             this.position = position;
-            
+            this.velocity = velocity;
+            this.radius = 3;
+        }
+        //defines and draws the proyectile
+        draw() {
+            context.beginPath(); //empieza un nuevo camino y borra los anteriores, 
+            context.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2); //circulo
+            context.fillStyle = 'red';
+            context.fill();
+            context.closePath(); //cierra el camino
+        }
+        //update position and draws the proyectile
+        update() {
+            this.draw();
+            this.position.x += this.velocity.x;
+            this.position.y += this.velocity.y;
         }
     }
+
+    const proyectiles = [];
+
 
     //object to monitor if a key is being pressed
     const keys = {
@@ -245,6 +263,7 @@
 
 
     /*This function is useb besause loading the image takes time*/
+    /*Function to animate the player movement, and also contains the logic to the calls every 60frames per second*/
     function animate() {
         requestAnimationFrame(animate); //request to start a function before the next frame is painted on 
         //black canvas filled 
@@ -252,6 +271,21 @@
         context.fillRect(0, 0, canvas.width, canvas.height);
         //draw player
         player.update();
+
+        //proyectiles update
+        proyectiles.forEach((proyectile, index) => {
+
+            if (proyectile.position.y + proyectile.radius <= 0) { //garbage collection for the proyectiles
+                setTimeout(() => {
+                    proyectiles.splice(index, 1);
+                }, 0.1);
+                
+            } else {
+                proyectile.update();
+            }
+
+        });
+
 
         if (keys.ArrowLeft.pressed && player.position.x >= 0) { //left key is pressed, move left.  it stops if the player goes outside to the left
             player.velocity.x = -5;
@@ -285,13 +319,23 @@
                 break;
 
             case 'ArrowRight':
-                console.log('right');
                 keys.ArrowRight.pressed = true;
 
                 break;
 
             case ' ':
-                console.log('shoot');
+                //creates new proyectiles using the x and y positions of the player, 
+                proyectiles.push(new Proyectile({
+                    position: {
+                        x: player.position.x + player.width / 2,
+                        y: player.position.y - 5
+                    },
+                    velocity: {
+                        x: 0,
+                        y: -10
+                    }
+                }));
+                //console.log(proyectiles)
                 break;
         }
     });
@@ -310,7 +354,7 @@
                 break;
 
             case ' ':
-                console.log('shoot');
+
                 break;
         }
     });
