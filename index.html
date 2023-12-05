@@ -244,7 +244,7 @@ function start(){
         constructor({ position, velocity }) {
             this.position = position;
             this.velocity = velocity;
-            this.radius = 4;
+            this.radius = 5;
         }
         //defines and draws the proyectile
         draw() {
@@ -360,7 +360,7 @@ function start(){
 
     const proyectiles = [];
     const player = new Player();         
-    const grids = [new Grid()];
+    const grids = [];
 
     
 
@@ -378,6 +378,9 @@ function start(){
     }
 
 
+
+    let frames = 0;
+    let randomInterval = Math.floor((Math.random() * 500) + 500);
 
 
     /*This function is useb besause loading the image takes time*/
@@ -405,10 +408,51 @@ function start(){
         });
 
         //grids draw rules 
-        grids.forEach((grid) => {
+        //looping invaders
+        grids.forEach((grid, gridIndex) => {
             grid.update();
-            grid.invaders.forEach((invader) => {
+            grid.invaders.forEach((invader, i) => {
                 invader.update({ velocity: grid.velocity });
+
+                proyectiles.forEach( (proyectile, j) =>{
+                    //detect for collisions
+                    if(proyectile.position.y - proyectile.radius <= invader.position.y + invader.height //top proyectile < top invader
+                      && proyectile.position.x + proyectile.radius  >= invader.position.x //right of the proyectile > left side of invader
+                      && proyectile.position.x - proyectile.radius <= invader.position.x + invader.width //left of the proyectile < right side of invader
+                      && proyectile.position.y + proyectile.radius >= invader.position.y //bottom proyectile > bottom of invader
+                       ){
+                        
+                        setTimeout(()=>{
+                            //check if the invader and projectile exist in the current array
+                            const invaderFound = grid.invaders.find(invader2 =>{
+                                return invader2 === invader
+                            })
+
+                            const projectileFound = proyectiles.find(proyectile2 =>{
+                                return proyectile2 === proyectile
+                            })
+
+                            //remove invader and projectile
+                            if(invaderFound && projectileFound){
+                                grid.invaders.splice(i,1);
+                                proyectiles.splice(j,1);
+
+                                //determine new width and position for a grid when 
+                                if(grid.invaders.length > 0 ){
+                                    const firstInvader = grid.invaders[0] //invader on the farthest left column
+                                    const lastInvader = grid.invaders[grid.invaders.length -1] //invader on the farthest right column
+
+                                    grid.width = lastInvader.position.x - firstInvader.position.x +lastInvader.width
+                                    grid.position.x = firstInvader.position.x
+                                }else{
+                                    grids.splice(gridIndex, 1)
+                                }
+
+                            }
+                            
+                        },0)
+                    }
+                })
             })
         })
 
@@ -427,8 +471,14 @@ function start(){
             }
         }
 
-
-
+        //controls when a new grid of enemies will spawn
+        if(frames % randomInterval === 0 ){
+            grids.push(new Grid());
+            //resets the random interval
+            randomInterval = Math.floor((Math.random() * 500) + 500);
+            frames = 0;
+        }
+        frames ++;
 
 
 
